@@ -6,14 +6,17 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
+    "jquery": "^3.3.1",
     "morgan": "~1.9.0",
     "superagent": "^3.8.3",
     "wechat": "^2.1.0",
-    "wechat-api": "^1.35.1"
+    "wechat-api": "^1.35.1",
+    "weui": "^1.1.3"
   }
 }

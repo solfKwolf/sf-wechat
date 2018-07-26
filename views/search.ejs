@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>查询结果</title>
+    <link rel="stylesheet" href='/stylesheets/weui.css'>
+</head>
+
+<body>
+    <div class="weui-cells__title">查询结果</div>
+    <% for(var i = 0;i<data.result.list.length;i++) { %
+        <div class="weui-cells__title">带说明的列表项</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p><%=data.result.list[i].remark ></p>
+                </div>
+                <div class="weui-cell__ft"><%=data.result.list[i].datetime ></div>
+            </div>
+        </div>
+    <% } %>
+
+</body>
+
+</html>

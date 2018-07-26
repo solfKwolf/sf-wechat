@@ -1,11 +1,130 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" href='/stylesheets/weui.css'>
+</head>
+
+<body>
+  <h1>快递查询</h1>
+  <div class="weui-cells weui-cells_form">
+    <div class="weui-cell weui-cell_vcode">
+      <div class="weui-cell__hd">
+        <label class="weui-label">快递公司</label>
+      </div>
+      <div class="weui-cell__bd">
+        <input class="weui-input" placeholder="请输入快递公司" id="express">
+      </div>
+      <div class="weui-cell__ft">
+        <a href="javascript:;" class="weui-vcode-btn" id="showPicker">快速获取</a>
+      </div>
+    </div>
+    <div class="weui-cell">
+      <div class="weui-cell__hd">
+        <label class="weui-label">快递单号</label>
+      </div>
+      <div class="weui-cell__bd">
+        <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入快递号" id="expressNumber"/>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="weui-btn-area">
+    <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确定</a>
+  </div>
+</body>
+<script src="/javascripts/jquery.min.js"></script>
+<script src="/javascripts/zepto.min.js"></script>
+<script>
+  function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return unescape(r[2]); return null; //返回参数值
+  }
+  function loadXMLDoc(url) {
+    return new Promise(function (resolve, reject) {
+      var xmlhttp;
+      if (window.XMLHttpRequest) {
+        //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+        xmlhttp = new XMLHttpRequest();
+      }
+      else {
+        // IE6, IE5 浏览器执行代码
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          resolve(xmlhttp.responseText);
+        }
+      }
+      xmlhttp.open("GET", url, true);
+      xmlhttp.send();
+
+    })
+  }
+  var redictUri = 'http://8vfauf.natappfree.cc';
+  var uri = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb89a127f8af01dec&redirect_uri='+redictUri+'&response_type=code&scope=snsapi_base';
+  var openId = localStorage.getItem("openId");
+  var code = getUrlParam('code');
+  var getAccessUri = redictUri+ '/api?code=' + code;
+  var getExpressApi = 'http://v.juhe.cn/exp/com?key=209123b0e025a430b587651a6dbe57c2';
+  window.onload = function () {
+    if (!openId) {
+      if (!code) {
+        location.replace(uri);
+      } else {
+        loadXMLDoc(getAccessUri).then(function (data) {
+          var data = JSON.parse(data);
+          var openId = data.openId;
+          localStorage.openId = openId;
+        })
+      }
+    }
+
+    $.ajax({
+      url: getExpressApi,
+      type: 'GET',
+      dataType: "jsonp",
+      success: function (data) {
+        data.result.map(function (currentValue) {
+          currentValue.label = currentValue.com;
+          currentValue.value = currentValue.no;
+          delete currentValue.com;
+          delete currentValue.no;
+        })
+        $('#showPicker').on('click', function () {
+          weui.picker(data.result, {
+            onChange: function (result) {
+            },
+            onConfirm: function (result) {
+              console.log(result);
+              $('#express').val(result);
+            }
+          });
+        });
+
+        $('#showTooltips').click(function () {
+          var express = $('#express').val();
+          var expressNumber = $('#expressNumber').val();
+          $.post({
+            url: redictUri+'/api',
+            data: "express="+express+"&expressNumber="+expressNumber
+          });
+        })
+
+      }
+    });
+  }
+</script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+
 </html>

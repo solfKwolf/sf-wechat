@@ -18,12 +18,14 @@ router.get('/', function (req, res, next) {
         })
 });
 
-router.post('/', function (req, res, next) {
-    superagent.get('http://v.juhe.cn/exp/index?key=209123b0e025a430b587651a6dbe57c2&com='+req.body.express+'&no='+req.body.expressNumber)
+router.get('/result', function (req, res, next) {
+    superagent.get('http://v.juhe.cn/exp/index?key=209123b0e025a430b587651a6dbe57c2&com='+req.query.express+'&no='+req.query.expressNumber)
         .end(function(err, data) {
             if(err) throw err;
-            console.log(data);
-            res.render('search', { data: data.text });
+            console.log(typeof data.text);
+            res.render('search',{
+                data: JSON.parse(data.text)
+            }); 
         })
     
 

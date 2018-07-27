@@ -11,14 +11,14 @@
 
 <body>
     <div class="weui-cells__title">查询结果</div>
-    <% for(var i = 0;i<data.result.list.length;i++) { %
+    <% for(var i = 0;i<data.result.list.length;i++) { %>
         <div class="weui-cells__title">带说明的列表项</div>
         <div class="weui-cells">
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <p><%=data.result.list[i].remark ></p>
+                    <p><%=data.result.list[i].remark %></p>
                 </div>
-                <div class="weui-cell__ft"><%=data.result.list[i].datetime ></div>
+                <div class="weui-cell__ft"><%=data.result.list[i].datetime %></div>
             </div>
         </div>
     <% } %>

@@ -70,7 +70,7 @@
 
     })
   }
-  var redictUri = 'http://8vfauf.natappfree.cc';
+  var redictUri = 'http://5ddq9v.natappfree.cc';
   var uri = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb89a127f8af01dec&redirect_uri='+redictUri+'&response_type=code&scope=snsapi_base';
   var openId = localStorage.getItem("openId");
   var code = getUrlParam('code');
@@ -100,6 +100,7 @@
           delete currentValue.com;
           delete currentValue.no;
         })
+        console.log('data.res')
         $('#showPicker').on('click', function () {
           weui.picker(data.result, {
             onChange: function (result) {
@@ -114,10 +115,11 @@
         $('#showTooltips').click(function () {
           var express = $('#express').val();
           var expressNumber = $('#expressNumber').val();
-          $.post({
-            url: redictUri+'/api',
+          $.get({
+            url: redictUri+'/api/result',
             data: "express="+express+"&expressNumber="+expressNumber
           });
+          $(location).attr('href', redictUri+"/api/result?express="+express+"&expressNumber="+expressNumber);
         })
 
       }
